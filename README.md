@@ -1,0 +1,2 @@
+# azores
+cheat sheet
