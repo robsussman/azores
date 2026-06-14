@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Azores PT">
+<meta name="theme-color" content="#0a1922">
+<title>Azores Portuguese</title>
+<style>
+  :root{
+    --abyss:#081019;        /* deep ocean, page base */
+    --basalt:#0f1f2b;       /* card base */
+    --basalt-2:#132735;     /* card alt / raised */
+    --tide:#1d3a4a;         /* borders */
+    --hydrangea:#6db5e6;    /* island hydrangea blue - primary accent */
+    --crater:#37c4b0;       /* crater-lake teal - secondary accent */
+    --lava:#ff8a5c;         /* warm volcanic accent for stress marks */
+    --mist:#e8f1f4;         /* primary text */
+    --fog:#9fb6c2;          /* secondary text */
+    --faint:#6d8593;        /* tertiary */
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  [data-theme="light"]{
+    --abyss:#eef4f6;
+    --basalt:#ffffff;
+    --basalt-2:#f4f8fa;
+    --tide:#d4e2e8;
+    --hydrangea:#1d6fa8;
+    --crater:#0f8a7a;
+    --lava:#d9633a;
+    --mist:#12222c;
+    --fog:#46606d;
+    --faint:#6d8593;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--abyss);
+    color:var(--mist);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:calc(40px + var(--safe-bottom));
+    transition:background .35s ease,color .35s ease;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    padding:calc(28px + var(--safe-top)) 22px 30px;
+    overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 88% -10%, rgba(55,196,176,.22), transparent 60%),
+      radial-gradient(120% 90% at 5% 0%, rgba(109,181,230,.20), transparent 55%),
+      linear-gradient(180deg,#0c2230,#081019);
+    border-bottom:1px solid var(--tide);
+  }
+  [data-theme="light"] .hero{
+    background:
+      radial-gradient(120% 90% at 88% -10%, rgba(15,138,122,.16), transparent 60%),
+      radial-gradient(120% 90% at 5% 0%, rgba(29,111,168,.16), transparent 55%),
+      linear-gradient(180deg,#ffffff,#eef4f6);
+  }
+  .eyebrow{
+    font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--crater);font-weight:700;margin:0 0 10px;
+  }
+  .hero h1{
+    margin:0;font-size:34px;line-height:1.04;font-weight:800;letter-spacing:-.02em;
+    font-family:"SF Pro Display",-apple-system,sans-serif;
+  }
+  .hero h1 .acc{color:var(--hydrangea);}
+  .hero p.sub{
+    margin:14px 0 0;font-size:14px;line-height:1.5;color:var(--fog);max-width:32ch;
+  }
+  .hero .hint{
+    margin:16px 0 0;font-size:12.5px;color:var(--faint);display:flex;align-items:center;gap:7px;
+  }
+  .spk-ico{width:15px;height:15px;flex:none;}
+
+  /* theme toggle */
+  .theme-btn{
+    position:absolute;top:calc(20px + var(--safe-top));right:18px;
+    width:38px;height:38px;border-radius:50%;border:1px solid var(--tide);
+    background:rgba(255,255,255,.06);color:var(--mist);
+    display:flex;align-items:center;justify-content:center;font-size:17px;
+    cursor:pointer;backdrop-filter:blur(6px);
+  }
+
+  /* ---------- Sticky nav ---------- */
+  nav.pills{
+    position:sticky;top:0;z-index:20;
+    background:color-mix(in srgb, var(--abyss) 86%, transparent);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--tide);
+    padding:10px 0;
+  }
+  .pills-scroll{
+    display:flex;gap:8px;overflow-x:auto;padding:0 16px;
+    scrollbar-width:none;-ms-overflow-style:none;
+  }
+  .pills-scroll::-webkit-scrollbar{display:none;}
+  .pill{
+    flex:none;font-size:13px;font-weight:600;
+    padding:8px 15px;border-radius:999px;
+    border:1px solid var(--tide);color:var(--fog);
+    background:var(--basalt);text-decoration:none;white-space:nowrap;
+    transition:all .2s ease;
+  }
+  .pill.active{
+    background:var(--hydrangea);border-color:var(--hydrangea);
+    color:#04121b;font-weight:700;
+  }
+
+  /* ---------- Sections ---------- */
+  section{padding:26px 16px 4px;scroll-margin-top:60px;}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin:0 0 14px;padding:0 4px;}
+  .sec-num{
+    font-size:12px;font-weight:700;color:var(--crater);
+    font-variant-numeric:tabular-nums;letter-spacing:.05em;
+  }
+  .sec-head h2{
+    margin:0;font-size:20px;font-weight:750;letter-spacing:-.01em;
+    font-family:"SF Pro Display",-apple-system,sans-serif;
+  }
+
+  /* ---------- Cards ---------- */
+  .card{
+    position:relative;
+    display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px 14px;
+    background:var(--basalt);
+    border:1px solid var(--tide);
+    border-radius:16px;
+    padding:15px 16px;
+    margin:0 0 10px;
+    cursor:pointer;
+    transition:transform .12s ease, background .2s ease, border-color .2s ease;
+    user-select:none;-webkit-user-select:none;
+  }
+  .card:active{transform:scale(.978);background:var(--basalt-2);}
+  .card.speaking{border-color:var(--crater);background:var(--basalt-2);}
+  .card.speaking::before{
+    content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:3px;
+    background:var(--crater);
+  }
+  .pt{
+    grid-column:1;
+    font-size:18px;font-weight:680;letter-spacing:-.01em;color:var(--mist);
+    line-height:1.2;
+  }
+  .pron{
+    grid-column:1;
+    font-size:14px;color:var(--hydrangea);font-weight:600;
+    margin-top:3px;letter-spacing:.01em;
+  }
+  .en{
+    grid-column:1;
+    font-size:14px;color:var(--fog);margin-top:5px;line-height:1.3;
+  }
+  .spk{
+    grid-column:2;grid-row:1 / span 3;
+    width:42px;height:42px;border-radius:50%;
+    border:1px solid var(--tide);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--crater);flex:none;
+    background:color-mix(in srgb,var(--crater) 10%, transparent);
+    transition:all .2s ease;
+  }
+  .card.speaking .spk{background:var(--crater);color:#04121b;border-color:var(--crater);transform:scale(1.06);}
+  .spk svg{width:19px;height:19px;}
+
+  /* destinations get a slightly different accent (place names) */
+  #dest .pt{color:var(--hydrangea);}
+  #dest .pron{color:var(--mist);font-weight:550;font-size:13.5px;}
+
+  /* sound key */
+  .keybox{
+    margin:6px 4px 0;padding:16px 17px;border-radius:16px;
+    background:linear-gradient(160deg,var(--basalt-2),var(--basalt));
+    border:1px solid var(--tide);
+  }
+  .keybox h3{margin:0 0 10px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--crater);}
+  .keybox li{font-size:13.5px;color:var(--fog);line-height:1.7;list-style:none;}
+  .keybox ul{margin:0;padding:0;}
+  .keybox b{color:var(--mist);font-weight:680;}
+
+  footer{
+    text-align:center;color:var(--faint);font-size:12.5px;
+    padding:30px 20px 10px;line-height:1.6;
+  }
+  footer .via{color:var(--crater);font-weight:600;font-style:italic;}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(24px + var(--safe-bottom));transform:translateX(-50%) translateY(20px);
+    background:var(--basalt-2);color:var(--mist);border:1px solid var(--tide);
+    padding:11px 18px;border-radius:999px;font-size:13.5px;font-weight:500;
+    opacity:0;pointer-events:none;transition:all .3s ease;z-index:50;
+    box-shadow:0 8px 30px rgba(0,0,0,.4);max-width:84vw;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;scroll-behavior:auto!important;}
+  }
+</style>
+</head>
+<body>
+  <button class="theme-btn" id="themeBtn" aria-label="Toggle light and dark">&#9789;</button>
+
+  <header class="hero">
+    <p class="eyebrow">Açores &middot; Portugal</p>
+    <h1>Essential <span class="acc">Portuguese</span><br>for the Azores</h1>
+    <p class="sub">European Portuguese for your trip. Pronunciation shown in plain syllables, with the <b style="color:var(--lava)">STRESSED</b> part in caps.</p>
+    <p class="hint">
+      <svg class="spk-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
+      Tap any card to hear it spoken
+    </p>
+  </header>
+
+  <nav class="pills">
+    <div class="pills-scroll" id="pills"></div>
+  </nav>
+
+  <main id="main"></main>
+
+  <div class="keybox" style="margin:18px 16px 0;">
+    <h3>Sound key</h3>
+    <ul>
+      <li><b>lh</b> = "lly" (million) &nbsp;&middot;&nbsp; <b>nh</b> = "ny" (canyon)</li>
+      <li><b>&atilde; / -&atilde;o</b> = nasal "ow" through the nose &nbsp;&middot;&nbsp; <b>&ccedil;</b> = soft "s"</li>
+      <li>Final unstressed <b>-e</b> is barely voiced</li>
+      <li><b>s</b> before a consonant or at word-end = "sh"</li>
+      <li><b>S&atilde;o</b> = "sowng" (saint) &nbsp;&middot;&nbsp; <b>Lagoa</b> = lake</li>
+    </ul>
+  </div>
+
+  <footer>
+    <span class="via">Boa viagem!</span><br>
+    Have a great trip. Add this to your Home Screen to use it offline on the islands.
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+const DATA = [{"id": "basics", "label": "Basics", "title": "Basics & Greetings", "rows": [{"pt": "Olá", "en": "Hello", "pron": "oh-LAH"}, {"pt": "Bom dia", "en": "Good morning", "pron": "bong DEE-ah"}, {"pt": "Boa tarde", "en": "Good afternoon", "pron": "BOH-ah TARD"}, {"pt": "Boa noite", "en": "Good evening/night", "pron": "BOH-ah NOYT"}, {"pt": "Adeus", "en": "Goodbye", "pron": "ah-DEH-oosh"}, {"pt": "Por favor", "en": "Please", "pron": "poor fah-VOR"}, {"pt": "Obrigado / Obrigada", "en": "Thank you (m / f)", "pron": "oh-bree-GAH-doo/dah"}, {"pt": "De nada", "en": "You're welcome", "pron": "duh NAH-dah"}, {"pt": "Sim / Não", "en": "Yes / No", "pron": "seeng / NOWNG"}, {"pt": "Desculpe", "en": "Sorry / Excuse me", "pron": "desh-KOOLP"}, {"pt": "Com licença", "en": "Excuse me (passing)", "pron": "kong lee-SEN-sah"}, {"pt": "Fala inglês?", "en": "Speak English?", "pron": "FAH-lah eeng-GLESH"}, {"pt": "Não compreendo", "en": "I don't understand", "pron": "nowng kong-pree-EN-doo"}, {"pt": "Não falo português", "en": "I don't speak PT", "pron": "FAH-loo poor-too-GESH"}]}, {"id": "getting", "label": "Around", "title": "Getting Around & Shopping", "rows": [{"pt": "Onde fica...?", "en": "Where is...?", "pron": "OND FEE-kah"}, {"pt": "a casa de banho", "en": "the bathroom", "pron": "ah KAH-zah duh BAN-yoo"}, {"pt": "à esquerda / direita", "en": "left / right", "pron": "ah esh-KER-dah/dee-RAY-tah"}, {"pt": "em frente", "en": "straight ahead", "pron": "eng FRENT"}, {"pt": "perto / longe", "en": "near / far", "pron": "PER-too / LONZH"}, {"pt": "Quanto custa?", "en": "How much is it?", "pron": "KWAN-too KOOSH-tah"}, {"pt": "a conta, por favor", "en": "the bill, please", "pron": "ah KON-tah"}, {"pt": "Tem...?", "en": "Do you have...?", "pron": "teng"}, {"pt": "Quero...", "en": "I want / I'd like...", "pron": "KEH-roo"}, {"pt": "Onde é o autocarro?", "en": "Where is the bus?", "pron": "OND eh oo ow-too-KAH-roo"}, {"pt": "Pode ajudar-me?", "en": "Can you help me?", "pron": "pod ah-zhoo-DAR-muh"}, {"pt": "Estou perdido/a", "en": "I'm lost", "pron": "shtoh per-DEE-doo"}]}, {"id": "dining", "label": "Dining", "title": "Food & Dining", "rows": [{"pt": "Uma mesa para dois", "en": "A table for two", "pron": "OO-mah MEH-zah"}, {"pt": "a ementa / o menu", "en": "the menu", "pron": "ah ee-MEN-tah"}, {"pt": "água (sem/com gás)", "en": "water (still/sparkling)", "pron": "AH-gwah seng/kong gash"}, {"pt": "um café", "en": "an espresso", "pron": "oong kah-FEH"}, {"pt": "cerveja / imperial", "en": "beer / draft beer", "pron": "ser-VAY-zhah"}, {"pt": "vinho tinto / branco", "en": "red / white wine", "pron": "VEE-nyoo TEEN-too"}, {"pt": "o pão", "en": "bread", "pron": "oo powng"}, {"pt": "o peixe / a carne", "en": "fish / meat", "pron": "oo PAYSH / ah KARN"}, {"pt": "Sou vegetariano/a", "en": "I am vegetarian", "pron": "veh-zhe-tah-ree-AH-noo"}, {"pt": "Saúde!", "en": "Cheers!", "pron": "sah-OOD"}, {"pt": "Estava delicioso", "en": "It was delicious", "pron": "deh-lee-see-OH-zoo"}]}, {"id": "driving", "label": "Driving", "title": "Driving & the Car", "rows": [{"pt": "o carro", "en": "car", "pron": "oo KAH-roo"}, {"pt": "gasolina / gasóleo", "en": "petrol / diesel", "pron": "gah-zoo-LEE-nah / gah-ZOL-yoo"}, {"pt": "depósito cheio", "en": "fill the tank", "pron": "deh-POZ-ee-too SHAY-oo"}, {"pt": "a bomba de gasolina", "en": "petrol station", "pron": "ah BOM-bah"}, {"pt": "estacionamento", "en": "parking", "pron": "shtah-syoo-nah-MEN-too"}, {"pt": "a portagem", "en": "toll", "pron": "ah poor-TAH-zheng"}, {"pt": "a autoestrada", "en": "highway", "pron": "ah ow-too-shTRAH-dah"}, {"pt": "a rotunda", "en": "roundabout", "pron": "ah roo-TOON-dah"}, {"pt": "devagar", "en": "slow down", "pron": "duh-vah-GAR"}, {"pt": "limite de velocidade", "en": "speed limit", "pron": "lee-MEET veh-loo-see-DAHD"}, {"pt": "o desvio", "en": "detour", "pron": "oo desh-VEE-oo"}, {"pt": "a estrada cortada", "en": "road closed", "pron": "ah shTRAH-dah koor-TAH-dah"}, {"pt": "perigo", "en": "danger", "pron": "peh-REE-goo"}, {"pt": "Pare / Stop", "en": "stop", "pron": "PAR"}, {"pt": "sentido único", "en": "one way", "pron": "sen-TEE-doo OO-nee-koo"}, {"pt": "o nevoeiro", "en": "fog (common here!)", "pron": "oo neh-vwAY-roo"}]}, {"id": "hiking", "label": "Hiking", "title": "Hiking & Nature", "rows": [{"pt": "o trilho / a trilha", "en": "trail / path", "pron": "oo TREE-lyoo"}, {"pt": "a caminhada", "en": "hike / walk", "pron": "ah kah-mee-NYAH-dah"}, {"pt": "o miradouro", "en": "viewpoint / lookout", "pron": "oo mee-rah-DOH-roo"}, {"pt": "a lagoa", "en": "lake / lagoon", "pron": "ah lah-GOH-ah"}, {"pt": "a cratera / a caldeira", "en": "crater / caldera", "pron": "ah krah-TEH-rah"}, {"pt": "a fumarola", "en": "fumarole / steam vent", "pron": "ah foo-mah-ROH-lah"}, {"pt": "a cascata", "en": "waterfall", "pron": "ah kash-KAH-tah"}, {"pt": "a montanha", "en": "mountain", "pron": "ah mon-TAH-nyah"}, {"pt": "o cume / o pico", "en": "summit / peak", "pron": "oo KOOM / oo PEE-koo"}, {"pt": "a praia", "en": "beach", "pron": "ah PRY-ah"}, {"pt": "as termas / poça", "en": "hot springs / pool", "pron": "ash TER-mash / POH-sah"}, {"pt": "Cuidado!", "en": "Careful! / Watch out!", "pron": "kwee-DAH-doo"}, {"pt": "escorregadio", "en": "slippery", "pron": "shkoo-reh-gah-DEE-oo"}, {"pt": "a água potável", "en": "drinking water", "pron": "ah AH-gwah poo-TAH-vel"}, {"pt": "Está longe?", "en": "Is it far?", "pron": "shTAH LONZH"}, {"pt": "Demora muito?", "en": "Does it take long?", "pron": "deh-MOH-rah MWEE-too"}]}, {"id": "emergency", "label": "Help", "title": "Emergencies", "rows": [{"pt": "Socorro!", "en": "Help!", "pron": "soo-KOH-roo"}, {"pt": "Chame um médico", "en": "Call a doctor", "pron": "SHAH-muh oong MEH-dee-koo"}, {"pt": "a farmácia", "en": "the pharmacy", "pron": "ah far-MAH-see-ah"}, {"pt": "o hospital", "en": "the hospital", "pron": "oo osh-pee-TAL"}, {"pt": "a polícia", "en": "the police", "pron": "ah poo-LEE-see-ah"}, {"pt": "Estou doente", "en": "I'm sick", "pron": "shtoh doo-ENT"}, {"pt": "Tenho alergia", "en": "I have an allergy", "pron": "TEN-yoo ah-ler-ZHEE-ah"}, {"pt": "número 112", "en": "emergency number", "pron": "NOO-meh-roo"}]}, {"id": "numbers", "label": "Numbers", "title": "Numbers", "rows": [{"pt": "1 um / 2 dois / 3 três", "en": "one / two / three", "pron": "oong/doysh/tresh"}, {"pt": "4 quatro / 5 cinco", "en": "four / five", "pron": "KWAH-troo/SEENG-koo"}, {"pt": "6 seis / 7 sete", "en": "six / seven", "pron": "saysh/SET"}, {"pt": "8 oito / 9 nove / 10 dez", "en": "eight/nine/ten", "pron": "OY-too/NOV/desh"}, {"pt": "20 vinte / 50 cinquenta", "en": "twenty / fifty", "pron": "seeng-KWEN-tah"}, {"pt": "100 cem", "en": "one hundred", "pron": "seng"}]}, {"id": "dest", "label": "Places", "title": "Top 10 Destinations", "rows": [{"pt": "Ponta Delgada", "en": "Main city & airport, São Miguel", "pron": "PON-tah del-GAH-dah"}, {"pt": "Sete Cidades", "en": "Twin blue & green crater lakes", "pron": "SET see-DAH-desh"}, {"pt": "Lagoa do Fogo", "en": "'Lake of Fire' crater lake, hiking", "pron": "lah-GOH-ah doo FOH-goo"}, {"pt": "Furnas", "en": "Hot springs & underground-cooked stew", "pron": "FOOR-nash"}, {"pt": "Vista do Rei", "en": "'King's View' viewpoint over Sete Cidades", "pron": "VEESH-tah doo RAY"}, {"pt": "Terra Nostra", "en": "Botanical garden & thermal pool, Furnas", "pron": "TEH-rah NOSH-trah"}, {"pt": "Ribeira Grande", "en": "Historic north-coast town", "pron": "ree-BAY-rah GRAND"}, {"pt": "Caldeira Velha", "en": "Forest hot-spring pools & waterfall", "pron": "kal-DAY-rah VEH-lyah"}, {"pt": "Mosteiros", "en": "West-coast village, best sunsets", "pron": "moosh-TAY-roosh"}, {"pt": "Nordeste", "en": "Scenic eastern viewpoints & lighthouse", "pron": "nor-DESHT"}]}];
+
+const main = document.getElementById('main');
+const pills = document.getElementById('pills');
+const toastEl = document.getElementById('toast');
+
+// speaker SVG
+const SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>';
+
+let speakCards = [];
+
+DATA.forEach((sec, i) => {
+  // nav pill
+  const a = document.createElement('a');
+  a.className = 'pill' + (i===0?' active':'');
+  a.href = '#' + sec.id;
+  a.textContent = sec.label;
+  a.dataset.target = sec.id;
+  pills.appendChild(a);
+
+  // section
+  const s = document.createElement('section');
+  s.id = sec.id;
+  const num = String(i+1).padStart(2,'0');
+  s.innerHTML = '<div class="sec-head"><span class="sec-num">'+num+'</span><h2>'+sec.title+'</h2></div>';
+
+  sec.rows.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.say = r.pt;
+    let inner = '<div class="pt">'+esc(r.pt)+'</div>';
+    if (sec.id === 'dest') {
+      inner += '<div class="en">'+esc(r.en)+'</div>';
+      inner += '<div class="pron">'+esc(r.pron)+'</div>';
+    } else {
+      inner += '<div class="pron">'+esc(r.pron)+'</div>';
+      inner += '<div class="en">'+esc(r.en)+'</div>';
+    }
+    inner += '<div class="spk">'+SPK+'</div>';
+    card.innerHTML = inner;
+    card.addEventListener('click', () => speak(r.pt, card));
+    s.appendChild(card);
+    speakCards.push(card);
+  });
+  main.appendChild(s);
+});
+
+function esc(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+
+/* ---------- Speech ---------- */
+let ptVoice = null;
+function pickVoice(){
+  const vs = speechSynthesis.getVoices();
+  // prefer European Portuguese
+  ptVoice = vs.find(v=>/pt[-_]PT/i.test(v.lang)) ||
+            vs.find(v=>/^pt/i.test(v.lang)) || null;
+}
+pickVoice();
+if (typeof speechSynthesis !== 'undefined') speechSynthesis.onvoiceschanged = pickVoice;
+
+let speakingCard = null;
+function speak(text, card){
+  if (!('speechSynthesis' in window)){ toast('Speech not supported on this browser'); return; }
+  speechSynthesis.cancel();
+  if (speakingCard) speakingCard.classList.remove('speaking');
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'pt-PT';
+  if (ptVoice) u.voice = ptVoice;
+  u.rate = 0.92;
+  u.onend = () => card.classList.remove('speaking');
+  u.onerror = () => card.classList.remove('speaking');
+  card.classList.add('speaking');
+  speakingCard = card;
+  speechSynthesis.speak(u);
+  if (!ptVoice) toast('Using default voice \u2014 install a Portuguese voice in Settings for best results', 3200);
+}
+
+/* ---------- Toast ---------- */
+let toastT;
+function toast(msg, ms=2200){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(()=>toastEl.classList.remove('show'), ms);
+}
+
+/* ---------- Scroll spy for pills ---------- */
+const pillEls = [...pills.children];
+const secEls = DATA.map(s=>document.getElementById(s.id));
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if (e.isIntersecting){
+      const id = e.target.id;
+      pillEls.forEach(p=>p.classList.toggle('active', p.dataset.target===id));
+      // keep active pill in view
+      const active = pills.querySelector('.pill.active');
+      if (active) active.scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+    }
+  });
+}, {rootMargin:'-45% 0px -50% 0px', threshold:0});
+secEls.forEach(s=>obs.observe(s));
+
+/* tapping a pill shouldn't leave it un-highlighted */
+pillEls.forEach(p=>p.addEventListener('click',()=>{
+  pillEls.forEach(x=>x.classList.remove('active'));
+  p.classList.add('active');
+}));
+
+/* ---------- Theme ---------- */
+const tBtn = document.getElementById('themeBtn');
+function setTheme(t){
+  if (t==='light'){ document.documentElement.setAttribute('data-theme','light'); tBtn.innerHTML='&#9728;'; }
+  else { document.documentElement.removeAttribute('data-theme'); tBtn.innerHTML='&#9789;'; }
+}
+let theme = 'dark';
+tBtn.addEventListener('click', ()=>{ theme = theme==='dark'?'light':'dark'; setTheme(theme); });
+
+/* warm up voices on first interaction (iOS quirk) */
+document.body.addEventListener('touchstart', ()=>{ pickVoice(); }, {once:true});
+
+/* ---------- Service worker: makes the page work offline ---------- */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      // If a controller is already active, we're cached and offline-ready.
+      if (navigator.serviceWorker.controller) {
+        showReady();
+      } else {
+        // First visit: wait until the SW finishes caching, then confirm.
+        reg.addEventListener('updatefound', () => {
+          const sw = reg.installing;
+          if (!sw) return;
+          sw.addEventListener('statechange', () => {
+            if (sw.state === 'activated' || sw.state === 'installed') showReady();
+          });
+        });
+      }
+    }).catch(()=>{ /* offline registration not available; page still works online */ });
+  });
+}
+let readyShown = false;
+function showReady(){
+  if (readyShown) return; readyShown = true;
+  toast('\u2713 Saved for offline use', 2600);
+}
+</script>
+</body>
+</html>
